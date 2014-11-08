@@ -1,0 +1,16 @@
+apply plugin : 'java'
+apply plugin : 'maven'
+apply plugin : 'eclipse'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+targetCompatibility = 1.6
+sourceCompatibility = 1.6
+
+dependencies {
+    compile 'com.google.guava:guava:18.0'
+    testCompile 'junit:junit:4.+'
+}
