@@ -4,4 +4,6 @@ public interface Cmd {
 
 	public abstract void execute();
 
+	public abstract void rollback();
+
 }
