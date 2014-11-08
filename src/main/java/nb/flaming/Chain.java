@@ -13,10 +13,7 @@ public class Chain {
 	public Result execute() {
 		Deque<Cmd> execs = Queues.newArrayDeque(z);
 		Deque<Cmd> rollBacks = Queues.newArrayDeque();
-		if (!run(execs, rollBacks)) {
-			return rollBack(rollBacks);
-		}
-		return Result.EXEC_SUCC();
+		return run(execs, rollBacks);
 	}
 
 	private Result rollBack(Deque<Cmd> build) {
@@ -31,9 +28,9 @@ public class Chain {
 		}
 	}
 
-	private boolean run(Deque<Cmd> build, Deque<Cmd> rollBackCmds) {
+	private Result run(Deque<Cmd> build, Deque<Cmd> rollBackCmds) {
 		if (build.isEmpty()) {
-			return true;
+			return Result.EXEC_SUCC();
 		}
 		Cmd c = build.pop();
 		rollBackCmds.push(c);
@@ -41,7 +38,7 @@ public class Chain {
 			c.execute();
 			return run(build, rollBackCmds);
 		} catch (Exception e) {
-			return false;
+			return rollBack(rollBackCmds);
 		}
 	}
 
