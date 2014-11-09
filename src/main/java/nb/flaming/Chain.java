@@ -6,51 +6,51 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 
-public class Chain {
+public class Chain<T extends Context> {
 
-	private List<Cmd> z = Lists.newArrayList();
+	private List<Cmd<T>> z = Lists.newArrayList();
 
-	public Result execute() {
-		Deque<Cmd> execs = Queues.newArrayDeque(z);
-		Deque<Cmd> rollBacks = Queues.newArrayDeque();
-		return run(execs, rollBacks);
+	public Result execute(T t) {
+		Deque<Cmd<T>> execs = Queues.newArrayDeque(z);
+		Deque<Cmd<T>> rollBacks = Queues.newArrayDeque();
+		return run(t, execs, rollBacks);
 	}
 
-	private Result rollBack(Deque<Cmd> build) {
+	private Result rollBack(T t, Deque<Cmd<T>> build) {
 		if (build.isEmpty()) {
 			return Result.ROLL_SUCC();
 		}
 		try {
-			build.pop().rollback();
-			return rollBack(build);
+			build.pop().rollback(t);
+			return rollBack(t, build);
 		} catch (Exception e) {
 			return Result.ROLL_FAIL();
 		}
 	}
 
-	private Result run(Deque<Cmd> build, Deque<Cmd> rollBackCmds) {
+	private Result run(T t, Deque<Cmd<T>> build, Deque<Cmd<T>> rollBackCmds) {
 		if (build.isEmpty()) {
 			return Result.EXEC_SUCC();
 		}
-		Cmd c = build.pop();
+		Cmd<T> c = build.pop();
 		rollBackCmds.push(c);
 		try {
-			c.execute();
-			return run(build, rollBackCmds);
+			c.execute(t);
+			return run(t, build, rollBackCmds);
 		} catch (Exception e) {
-			c.onException();
-			return rollBack(rollBackCmds);
+			c.onException(t);
+			return rollBack(t, rollBackCmds);
 		}
 	}
 
-	public Chain add(Cmd... cmds) {
-		for (Cmd c : cmds) {
+	public Chain<T> add(Cmd<T>... cmds) {
+		for (Cmd<T> c : cmds) {
 			z.add(c);
 		}
 		return this;
 	}
 	
-	public Cmd get(int idx){
+	public Cmd<T> get(int idx){
 		return z.get(idx);
 	}
 

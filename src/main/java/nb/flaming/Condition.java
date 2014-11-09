@@ -1,7 +1,7 @@
 package nb.flaming;
 
-public interface Condition {
+public interface Condition<T> {
 
-	boolean isSuccess();
+	boolean isSuccess(T t);
 
 }

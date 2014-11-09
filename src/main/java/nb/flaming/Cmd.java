@@ -1,11 +1,11 @@
 package nb.flaming;
 
-public interface Cmd {
+public interface Cmd<T extends Context> {
 
-	public abstract void execute();
+	public abstract void execute(T t);
 
-	public abstract void rollback();
+	public abstract void rollback(T t);
 
-	public abstract void onException();
+	public abstract void onException(T t);
 
 }

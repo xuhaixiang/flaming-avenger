@@ -9,65 +9,71 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Test;
 
+@SuppressWarnings("unchecked")
 public class ChainTest {
 
 	@Test
 	public void run_empty_return_true() {
-		Chain x = new Chain();
-		Result result = x.execute();
+		Context t = mock(Context.class);
+		Chain<Context> x = new Chain<Context>();
+		Result result = x.execute(t);
 		assertTrue(result.getExec());
 	}
 
 	@Test
 	public void add_one_cmd_and_execute_succ() {
-		Cmd cmd = mock(Cmd.class);
-		Chain x = new Chain();
+		Context t = mock(Context.class);
+		Cmd<Context> cmd = mock(CmdContext.class);
+		Chain<Context> x = new Chain<Context>();
 		x.add(cmd);
-		assertTrue(x.execute().getExec());
-		verify(cmd).execute();
+		assertTrue(x.execute(t).getExec());
+		verify(cmd).execute(t);
 	}
 
 	@Test
 	public void add_more_cmd_and_execute_succ() {
-		Cmd cmd1 = mock(Cmd.class);
-		Cmd cmd2 = mock(Cmd.class);
-		Cmd cmd3 = mock(Cmd.class);
-		Chain x = new Chain();
-		Result execute = x.add(cmd1).add(cmd2).add(cmd3).execute();
+		Context t = mock(Context.class);
+		Cmd<Context> cmd1 = mock(CmdContext.class);
+		Cmd<Context> cmd2 = mock(CmdContext.class);
+		Cmd<Context> cmd3 = mock(CmdContext.class);
+		Chain<Context> x = new Chain<Context>();
+		Result execute = x.add(cmd1).add(cmd2).add(cmd3).execute(t);
 		assertTrue(execute.getExec());
-		verify(cmd1).execute();
-		verify(cmd2).execute();
-		verify(cmd3).execute();
+		verify(cmd1).execute(t);
+		verify(cmd2).execute(t);
+		verify(cmd3).execute(t);
 	}
 
 	@Test
 	public void add_more_cmd_and_execute_fail() {
-		Cmd cmd1 = mock(Cmd.class);
-		Cmd cmd2 = mock(Cmd.class);
-		Cmd cmd3 = mock(Cmd.class);
-		doThrow(RuntimeException.class).when(cmd2).execute();
-		Chain x = new Chain();
-		Result execute = x.add(cmd1).add(cmd2).add(cmd3).execute();
+		Context t = mock(Context.class);
+		Cmd<Context> cmd1 = mock(CmdContext.class);
+		Cmd<Context> cmd2 = mock(CmdContext.class);
+		Cmd<Context> cmd3 = mock(CmdContext.class);
+		doThrow(RuntimeException.class).when(cmd2).execute(t);
+		Chain<Context> x = new Chain<Context>();
+		Result execute = x.add(cmd1).add(cmd2).add(cmd3).execute(t);
 		assertFalse(execute.getExec());
-		verify(cmd1).execute();
-		verify(cmd2).execute();
+		verify(cmd1).execute(t);
+		verify(cmd2).execute(t);
 		verifyNoMoreInteractions(cmd3);
 	}
 
 	@Test
 	public void rollback_when_execute_fail() {
-		Cmd cmd1 = mock(Cmd.class);
-		Cmd cmd2 = mock(Cmd.class);
-		Cmd cmd3 = mock(Cmd.class);
-		doThrow(RuntimeException.class).when(cmd2).execute();
-		Chain x = new Chain();
-		Result execute = x.add(cmd1, cmd2, cmd3).execute();
+		Context t = mock(Context.class);
+		Cmd<Context> cmd1 = mock(CmdContext.class);
+		Cmd<Context> cmd2 = mock(CmdContext.class);
+		Cmd<Context> cmd3 = mock(CmdContext.class);
+		doThrow(RuntimeException.class).when(cmd2).execute(t);
+		Chain<Context> x = new Chain<Context>();
+		Result execute = x.add(cmd1, cmd2, cmd3).execute(t);
 		assertFalse(execute.getExec());
 		assertTrue(execute.getRollBack());
-		verify(cmd1).execute();
-		verify(cmd2).execute();
-		verify(cmd2).rollback();
-		verify(cmd1).rollback();
+		verify(cmd1).execute(t);
+		verify(cmd2).execute(t);
+		verify(cmd2).rollback(t);
+		verify(cmd1).rollback(t);
 
 	}
 }

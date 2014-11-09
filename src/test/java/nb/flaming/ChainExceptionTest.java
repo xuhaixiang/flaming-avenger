@@ -6,15 +6,17 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 
+@SuppressWarnings("unchecked")
 public class ChainExceptionTest {
 
 	@Test
 	public void onExceptionNotify() {
-		Cmd c = mock(Cmd.class);
-		Cmd c1 = mock(Cmd.class);
-		Chain x = new Chain();
-		doThrow(RuntimeException.class).when(c1).execute();
-		x.add(c, c1).execute();
-		verify(c1).onException();
+		Context t = mock(Context.class);
+		Cmd<Context> c = mock(CmdContext.class);
+		Cmd<Context> c1 = mock(CmdContext.class);
+		Chain<Context> x = new Chain<Context>();
+		doThrow(RuntimeException.class).when(c1).execute(t);
+		x.add(c, c1).execute(t);
+		verify(c1).onException(t);
 	}
 }
