@@ -49,5 +49,9 @@ public class Chain {
 		}
 		return this;
 	}
+	
+	public Cmd get(int idx){
+		return z.get(idx);
+	}
 
 }
