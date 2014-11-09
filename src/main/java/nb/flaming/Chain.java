@@ -38,6 +38,7 @@ public class Chain {
 			c.execute();
 			return run(build, rollBackCmds);
 		} catch (Exception e) {
+			c.onException();
 			return rollBack(rollBackCmds);
 		}
 	}

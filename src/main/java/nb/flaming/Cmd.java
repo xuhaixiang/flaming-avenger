@@ -6,4 +6,6 @@ public interface Cmd {
 
 	public abstract void rollback();
 
+	public abstract void onException();
+
 }
