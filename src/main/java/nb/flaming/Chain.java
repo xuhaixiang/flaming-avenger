@@ -10,13 +10,13 @@ public class Chain<T extends Context> {
 
 	private List<Cmd<T>> z = Lists.newArrayList();
 
-	public Result execute(T t) {
+	public Result run(T t) {
 		Deque<Cmd<T>> execs = Queues.newArrayDeque(z);
 		Deque<Cmd<T>> rollBacks = Queues.newArrayDeque();
 		return run(t, execs, rollBacks);
 	}
 
-	private Result rollBack(T t, Deque<Cmd<T>> build) {
+	protected Result rollBack(T t, Deque<Cmd<T>> build) {
 		if (build.isEmpty()) {
 			return Result.ROLL_SUCC();
 		}
@@ -28,7 +28,7 @@ public class Chain<T extends Context> {
 		}
 	}
 
-	private Result run(T t, Deque<Cmd<T>> build, Deque<Cmd<T>> rollBackCmds) {
+	protected Result run(T t, Deque<Cmd<T>> build, Deque<Cmd<T>> rollBackCmds) {
 		if (build.isEmpty()) {
 			return Result.EXEC_SUCC();
 		}
@@ -52,6 +52,10 @@ public class Chain<T extends Context> {
 	
 	public Cmd<T> get(int idx){
 		return z.get(idx);
+	}
+	
+	protected List<Cmd<T>> get(){
+		return z;
 	}
 
 }

@@ -2,33 +2,33 @@ package nb.flaming;
 
 public class Result {
 
-	private Boolean exec;
-	private Boolean rollBack;
+	private Boolean execStatus;
+	private Boolean rollBackStatus;
 
 	public Result(boolean b, boolean c) {
-		exec = b;
-		rollBack = c;
+		execStatus = b;
+		rollBackStatus = c;
 	}
 
-	public Boolean getExec() {
-		return exec;
+	public Boolean getExecStatus() {
+		return execStatus;
 	}
 
-	public Boolean getRollBack() {
-		return rollBack;
+	public Boolean getRollBackStatus() {
+		return rollBackStatus;
 	}
 
-	public void setExec(Boolean exec) {
-		this.exec = exec;
+	public void setExecStatus(Boolean exec) {
+		this.execStatus = exec;
 	}
 
-	public void setRollBack(Boolean rollBack) {
-		this.rollBack = rollBack;
+	public void setRollBackStatus(Boolean rollBack) {
+		this.rollBackStatus = rollBack;
 	}
 
 	@Override
 	public String toString() {
-		return "Result [exec=" + exec + ", rollBack=" + rollBack + "]";
+		return "Result [exec=" + execStatus + ", rollBack=" + rollBackStatus + "]";
 	}
 
 	public static Result EXEC_SUCC() {
