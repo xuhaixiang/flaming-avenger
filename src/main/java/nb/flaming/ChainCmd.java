@@ -7,9 +7,9 @@ public class ChainCmd<T extends Context> extends Chain<T> implements Cmd<T> {
 		Result result = run(t);
 		if (!result.getExecStatus()) {
 			if (result.getRollBackStatus()) {
-				throw new ChainCmdException();
+				throw new ChainCmdException(getException());
 			} else {
-				throw new ChainCmdRollbackException();
+				throw new ChainCmdRollbackException(getException());
 			}
 		}
 	}

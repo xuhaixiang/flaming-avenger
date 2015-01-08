@@ -9,6 +9,8 @@ import com.google.common.collect.Queues;
 public class Chain<T extends Context> {
 
 	private List<Cmd<T>> z = Lists.newArrayList();
+	
+	private Exception e;
 
 	public Result run(T t) {
 		Deque<Cmd<T>> execs = Queues.newArrayDeque(z);
@@ -38,6 +40,7 @@ public class Chain<T extends Context> {
 			c.execute(t);
 			return run(t, build, rollBackCmds);
 		} catch (Exception e) {
+			this.e = e;
 			c.onException(t, e);
 			return rollBack(t, rollBackCmds);
 		}
@@ -50,12 +53,16 @@ public class Chain<T extends Context> {
 		return this;
 	}
 	
-	public Cmd<T> get(int idx){
+	protected Cmd<T> get(int idx){
 		return z.get(idx);
 	}
 	
 	protected List<Cmd<T>> get(){
 		return z;
+	}
+	
+	protected Exception getException(){
+		return e;
 	}
 
 }
