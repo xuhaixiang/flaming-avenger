@@ -6,6 +6,6 @@ public interface Cmd<T extends Context> {
 
 	public abstract void rollback(T t);
 
-	public abstract void onException(T t);
+	public abstract void onException(T t, Exception e);
 
 }

@@ -28,8 +28,8 @@ public class RouteCmd<T extends Context> implements Cmd<T> {
 	}
 
 	@Override
-	public void onException(T t) {
-		delegate.onException(t);
+	public void onException(T t, Exception e) {
+		delegate.onException(t, e);
 	}
 
 	public Condition<T> getCond() {

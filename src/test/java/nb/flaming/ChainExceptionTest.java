@@ -15,8 +15,9 @@ public class ChainExceptionTest {
 		Cmd<Context> c = mock(CmdContext.class);
 		Cmd<Context> c1 = mock(CmdContext.class);
 		Chain<Context> x = new Chain<Context>();
-		doThrow(RuntimeException.class).when(c1).execute(t);
+		RuntimeException re = new RuntimeException();
+		doThrow(re).when(c1).execute(t);
 		x.add(c, c1).execute(t);
-		verify(c1).onException(t);
+		verify(c1).onException(t, re);
 	}
 }

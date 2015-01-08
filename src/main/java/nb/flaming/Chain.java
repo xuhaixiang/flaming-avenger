@@ -38,7 +38,7 @@ public class Chain<T extends Context> {
 			c.execute(t);
 			return run(t, build, rollBackCmds);
 		} catch (Exception e) {
-			c.onException(t);
+			c.onException(t, e);
 			return rollBack(t, rollBackCmds);
 		}
 	}
